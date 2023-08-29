@@ -8,12 +8,29 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-ApiClient apiClient = ApiClient();
-
 class _HomeState extends State<Home> {
+  ApiClient _apiClient = ApiClient();
   @override
   Widget build(BuildContext context) {
-    print(apiClient.getVideos());
-    return Scaffold();
+    return FutureBuilder(
+        future: _apiClient.getVideos(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text("Some error Occured!!"),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+              return Container(
+                child: Image.network(snapshot.data[index]['snippet']
+                    ['thumbnails']['high']['url']),
+              );
+            });
+          }
+        });
   }
 }
