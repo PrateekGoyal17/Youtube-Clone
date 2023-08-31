@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numeral/numeral.dart';
 import 'package:youtube_clone/services/api_client.dart';
 
 class Home extends StatefulWidget {
@@ -23,13 +24,39 @@ class _HomeState extends State<Home> {
             );
           } else {
             return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-              return Container(
-                child: Image.network(snapshot.data[index]['snippet']
-                    ['thumbnails']['high']['url']),
-              );
-            });
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Image.network(snapshot.data[index]['snippet']
+                            ['thumbnails']['high']['url']),
+                        Row(
+                          children: [
+                            const CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"),
+                            ),
+                            SizedBox(width: 10,),
+                            Expanded(
+                                child: Text(
+                              snapshot.data[index]['snippet']['title'],
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                          ],
+                        ),
+                        Row(children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:50.0),
+                            child: Text(Numeral(int.parse(snapshot.data[index]['statistics']["viewCount"])).format()),
+                          ),
+                        ],),
+                      ],
+                    ),
+                  );
+                });
           }
         });
   }
