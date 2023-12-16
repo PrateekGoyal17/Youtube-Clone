@@ -5,6 +5,5 @@ void main() => runApp(
       MaterialApp(
         home: Dashboard(),
         theme: ThemeData.dark(),
-        debugShowCheckedModeBanner: false,
       ),
     );
